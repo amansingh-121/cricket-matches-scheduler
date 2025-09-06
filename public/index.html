@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Match Scheduler</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Auth Section -->
+        <div id="auth-section" class="section">
+            <h1>Cricket Match Scheduler</h1>
+            <div class="auth-forms">
+                <div class="form-container">
+                    <h3>Login</h3>
+                    <form id="login-form">
+                        <input type="email" id="login-email" placeholder="Email" required>
+                        <input type="password" id="login-password" placeholder="Password" required>
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+                <div class="form-container">
+                    <h3>Sign Up</h3>
+                    <form id="signup-form">
+                        <input type="text" id="signup-name" placeholder="Name" required>
+                        <input type="tel" id="signup-phone" placeholder="Phone" required>
+                        <input type="email" id="signup-email" placeholder="Email" required>
+                        <input type="password" id="signup-password" placeholder="Password" required>
+                        <input type="text" id="signup-team-name" placeholder="Team Name" required>
+                        <select id="signup-role">
+                            <option value="captain">Captain</option>
+                            <option value="player">Player</option>
+                        </select>
+                        <button type="submit">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="section hidden">
+            <header>
+                <h2>Dashboard</h2>
+                <div class="user-info">
+                    <span id="user-name"></span>
+                    <div id="teams-list" style="margin: 5px 0; font-size: 14px; color: #666;"></div>
+                    <button id="logout-btn">Logout</button>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <!-- Dynamic Layout Container -->
+                <div class="dynamic-layout">
+                    <!-- My Matches Section -->
+                    <div class="card matches-card">
+                        <h3>My Matches</h3>
+                        <div id="matches-list"></div>
+                    </div>
+
+                    <!-- Availability Cards Container -->
+                    <div class="availability-cards-container" id="availability-cards-container" style="display: none;">
+                        <div class="card availability-card" id="availability-section">
+                            <h3>Post Availability - Free Ground</h3>
+                            <p class="info-text">Post when your team is available to play on free grounds. System will automatically match you with teams posting same day and bet amount.</p>
+                            <form id="availability-form" class="availability-form">
+                                <div class="form-group">
+                                    <select id="day-select" required>
+                                        <option value="">Select Day</option>
+                                        <option value="MONDAY">Monday</option>
+                                        <option value="TUESDAY">Tuesday</option>
+                                        <option value="WEDNESDAY">Wednesday</option>
+                                        <option value="THURSDAY">Thursday</option>
+                                        <option value="FRIDAY">Friday</option>
+                                        <option value="SATURDAY">Saturday</option>
+                                        <option value="SUNDAY">Sunday</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="date" id="match-date" placeholder="Match Date (optional)" title="Select specific date for the match">
+                                </div>
+                                <div class="form-group">
+                                    <select id="bet-amount" required>
+                                        <option value="">Select Bet Range</option>
+                                        <option value="Friendly Match">Friendly Match</option>
+                                        <option value="100-200">₹100-200</option>
+                                        <option value="200-300">₹200-300</option>
+                                        <option value="400-600">₹400-600</option>
+                                        <option value="600-800">₹600-800</option>
+                                        <option value="800-1000">₹800-1000</option>
+                                        <option value="custom">Custom Amount (Above ₹1000)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="custom-bet-group" style="display: none;">
+                                    <input type="text" id="custom-bet-amount" placeholder="Enter custom bet amount (e.g., ₹1500)">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="time-slot" placeholder="Time Slot (optional)">
+                                </div>
+                                <div class="form-group">
+                                    <select id="ground">
+                                        <option value="Dussehra Ground" selected>Dussehra Ground</option>
+                                        <option value="Air Force Ground">Air Force Ground</option>
+                                        <option value="56 Sector Ground">56 Sector Ground</option>
+                                    </select>
+                                </div>
+                                <div class="form-group submit-group">
+                                    <button type="submit">Post Free Ground Availability</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card availability-card" id="paid-availability-section">
+                            <h3>Post Availability - Paid Ground</h3>
+                            <p class="info-text">Post when your team is available to play on paid ground. System will automatically match you with teams posting same day and bet amount.</p>
+                            <form id="paid-availability-form" class="availability-form">
+                                <div class="form-group">
+                                    <select id="paid-day-select" required>
+                                        <option value="">Select Day</option>
+                                        <option value="MONDAY">Monday</option>
+                                        <option value="TUESDAY">Tuesday</option>
+                                        <option value="WEDNESDAY">Wednesday</option>
+                                        <option value="THURSDAY">Thursday</option>
+                                        <option value="FRIDAY">Friday</option>
+                                        <option value="SATURDAY">Saturday</option>
+                                        <option value="SUNDAY">Sunday</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="date" id="paid-match-date" placeholder="Match Date (optional)" title="Select specific date for the match">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="contact-captain" placeholder="Contact Captain for Bet (optional)">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="paid-time-slot" placeholder="Time Slot">
+                                </div>
+                                <div class="form-group">
+                                    <select id="paid-ground" required>
+                                        <option value="">Select Paid Ground</option>
+                                        <option value="Awesome Aravali Cricket Academy">Awesome Aravali Cricket Academy</option>
+                                        <option value="DD SPORTS ACADEMY">DD SPORTS ACADEMY</option>
+                                        <option value="Faridabad Cricket Ground (FCG)">Faridabad Cricket Ground (FCG)</option>
+                                        <option value="Jai Bajrang Bali">Jai Bajrang Bali</option>
+                                        <option value="JAYQO SPORTS COMPLEX">JAYQO SPORTS COMPLEX</option>
+                                        <option value="Ma Vaishno Devi Cricket Ground">Ma Vaishno Devi Cricket Ground</option>
+                                        <option value="Ravinder Phagna Box Cricket Ground (Indoor)">Ravinder Phagna Box Cricket Ground (Indoor)</option>
+                                        <option value="Shri Baba Shyam Cricket Academy">Shri Baba Shyam Cricket Academy</option>
+                                        <option value="SNS Sports Club, Ground 2, (Ex RNC)">SNS Sports Club, Ground 2, (Ex RNC)</option>
+                                        <option value="Sumer Singh Sports Academy">Sumer Singh Sports Academy</option>
+                                        <option value="YFCA Cricket Ground">YFCA Cricket Ground</option>
+                                        <option value="AD Sports Complex">AD Sports Complex</option>
+                                        <option value="Al Falah Cricket Ground">Al Falah Cricket Ground</option>
+                                        <option value="FERVENT Sports Arena">FERVENT Sports Arena</option>
+                                        <option value="Indiana Sports Cricket Ground">Indiana Sports Cricket Ground</option>
+                                        <option value="K.D Cricket Academy">K.D Cricket Academy</option>
+                                        <option value="Mujedi Cricket Ground">Mujedi Cricket Ground</option>
+                                        <option value="Narang Cricket Academy">Narang Cricket Academy</option>
+                                        <option value="RS Cricket Academy">RS Cricket Academy</option>
+                                        <option value="Shree Ji Cricket Ground">Shree Ji Cricket Ground</option>
+                                        <option value="The Crickters Arena & RS Academy">The Crickters Arena & RS Academy</option>
+                                        <option value="Young Faridabad CRICKET Academy & Ground">Young Faridabad CRICKET Academy & Ground</option>
+                                        <option value="Bhumi Cricket Academy">Bhumi Cricket Academy</option>
+                                        <option value="GURUKUL CRICKET GROUND GCG">GURUKUL CRICKET GROUND GCG</option>
+                                        <option value="Viraj Cricket Ground">Viraj Cricket Ground</option>
+                                        <option value="Blue Bird Sports Complex">Blue Bird Sports Complex</option>
+                                        <option value="Dugout Cricket Ground">Dugout Cricket Ground</option>
+                                        <option value="FCA Cricket Ground Riwazpur">FCA Cricket Ground Riwazpur</option>
+                                        <option value="Jai Mahakal Cricket Ground">Jai Mahakal Cricket Ground</option>
+                                        <option value="JONTY 96 Cricket Academy">JONTY 96 Cricket Academy</option>
+                                        <option value="Modern Arya Cricket Academy">Modern Arya Cricket Academy</option>
+                                        <option value="Ravinder phagna Cricket Ground Bhumi Pali">Ravinder phagna Cricket Ground Bhumi Pali</option>
+                                        <option value="SNS Sports Club (Box Cricket), Sector 84">SNS Sports Club (Box Cricket), Sector 84</option>
+                                        <option value="SNS Sports Club, Ground 3, (Ex Avanya)">SNS Sports Club, Ground 3, (Ex Avanya)</option>
+                                        <option value="Vanya Cricket Academy Pali Sohna Road">Vanya Cricket Academy Pali Sohna Road</option>
+                                        <option value="SNS Sports Club, Sector 86">SNS Sports Club, Sector 86</option>
+                                        <option value="ADS Cricket Club">ADS Cricket Club</option>
+                                        <option value="Baba Surdas">Baba Surdas</option>
+                                        <option value="Green Grass Sports Tigaon">Green Grass Sports Tigaon</option>
+                                        <option value="JMB Sports City">JMB Sports City</option>
+                                        <option value="Krishna Ground, Pal Cricket Academy">Krishna Ground, Pal Cricket Academy</option>
+                                        <option value="Nacholi World Sports Academy">Nacholi World Sports Academy</option>
+                                        <option value="NB Sports cricket Ground">NB Sports cricket Ground</option>
+                                        <option value="RS Nacholi Ground 1">RS Nacholi Ground 1</option>
+                                        <option value="Strikers Cricket Arena">Strikers Cricket Arena</option>
+                                        <option value="The Crickters Arena & RS Cricket Academy Bhopani">The Crickters Arena & RS Cricket Academy Bhopani</option>
+                                        <option value="Palwali Cricket Ground">Palwali Cricket Ground</option>
+                                        <option value="Chandawali Cricket Club">Chandawali Cricket Club</option>
+                                        <option value="Sports Wing Ground">Sports Wing Ground</option>
+                                        <option value="BS Sports Academy">BS Sports Academy</option>
+                                        <option value="Eden Park Sec 142">Eden Park Sec 142</option>
+                                        <option value="GD Sports Complex Ground">GD Sports Complex Ground</option>
+                                        <option value="Jai Shree Ram Sports City">Jai Shree Ram Sports City</option>
+                                        <option value="Karhana Sports Complex">Karhana Sports Complex</option>
+                                        <option value="R K Cricket Ground">R K Cricket Ground</option>
+                                        <option value="Rawal Cricket Ground">Rawal Cricket Ground</option>
+                                        <option value="SNS Sports Club, Ground 1, Sector 74">SNS Sports Club, Ground 1, Sector 74</option>
+                                        <option value="Winner Sportss Club">Winner Sportss Club</option>
+                                        <option value="AB CKT HUB">AB CKT HUB</option>
+                                        <option value="AKP Cricket Academy">AKP Cricket Academy</option>
+                                        <option value="Chatarpati Sports Complex">Chatarpati Sports Complex</option>
+                                        <option value="Heritage Cricket Academy">Heritage Cricket Academy</option>
+                                        <option value="JPAC">JPAC</option>
+                                        <option value="Lords CKT Ground">Lords CKT Ground</option>
+                                        <option value="Nacholi World Sports Academy 2">Nacholi World Sports Academy 2</option>
+                                        <option value="R S Nacholi Ground 2">R S Nacholi Ground 2</option>
+                                        <option value="San Cricket Club Faridabad Pali">San Cricket Club Faridabad Pali</option>
+                                        <option value="Sushii Pehalwan Sports Complex">Sushii Pehalwan Sports Complex</option>
+                                        <option value="Venkatesh Cricket Academy">Venkatesh Cricket Academy</option>
+                                        <option value="Avanay Cricket Garund">Avanay Cricket Garund</option>
+                                        <option value="Gods Cricket Ground">Gods Cricket Ground</option>
+                                        <option value="Viraj Cricket Academy">Viraj Cricket Academy</option>
+                                    </select>
+                                </div>
+                                <div class="form-group submit-group">
+                                    <button type="submit">Post Paid Ground Availability</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Open Requests Container -->
+                    <div class="open-requests-container">
+                        <div class="card">
+                            <h3>Open Requests - Free Ground</h3>
+                            <div id="open-requests"></div>
+                        </div>
+                        <div class="card">
+                            <h3>Open Requests - Paid Ground</h3>
+                            <div id="paid-open-requests"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Chat Modal -->
+        <div id="chat-modal" class="modal hidden">
+            <div class="modal-content chat-modal">
+                <div class="chat-header">
+                    <h3 id="chat-title">Match Chat</h3>
+                    <button type="button" id="close-chat">&times;</button>
+                </div>
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="chat-input">
+                    <input type="text" id="message-input" placeholder="Type your message..." maxlength="500">
+                    <button type="button" id="send-message">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

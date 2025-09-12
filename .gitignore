@@ -1,7 +1,0 @@
-node_modules/
-data.json
-data_backup.json
-.env
-*.log
-.DS_Store
-Thumbs.db

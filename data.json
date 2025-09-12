@@ -1,0 +1,561 @@
+{
+  "users": [
+    {
+      "id": "mfcrb9oomwgnfkbxqq",
+      "name": "Aman Bisht",
+      "phone": "9911086528",
+      "password": "Aman@123",
+      "role": "player",
+      "created_at": "2025-09-09T16:20:14.664Z"
+    },
+    {
+      "id": "mfcshlsgmr8683kba9s",
+      "name": "rohan deshwal",
+      "phone": "9988676782",
+      "password": "rohan@123",
+      "role": "player",
+      "created_at": "2025-09-09T16:53:09.904Z"
+    },
+    {
+      "id": "mfcsqw7oiukwvr60jz",
+      "name": "rohit",
+      "phone": "8866356426",
+      "password": "rohit@123",
+      "role": "captain",
+      "created_at": "2025-09-09T17:00:23.316Z"
+    },
+    {
+      "id": "mfct13sm2n33eg8zwxf",
+      "name": "sagar bisht",
+      "phone": "5345739472",
+      "password": "sagar@123",
+      "role": "captain",
+      "created_at": "2025-09-09T17:08:19.702Z"
+    },
+    {
+      "id": "mfctpavj9ki16rp3pvd",
+      "name": "lucky",
+      "phone": "6482472842",
+      "password": "lucky@123",
+      "role": "captain",
+      "created_at": "2025-09-09T17:27:08.624Z"
+    },
+    {
+      "id": "mfdfwukbeahd7enopy",
+      "name": "zishan",
+      "phone": "991106528",
+      "password": "zishan@123",
+      "role": "captain",
+      "created_at": "2025-09-10T03:48:52.283Z"
+    },
+    {
+      "id": "mffi1e2nn8w5klr7mfr",
+      "name": "lucky",
+      "phone": "6638383737",
+      "password": "lucky@123456",
+      "role": "captain",
+      "created_at": "2025-09-11T14:23:55.775Z"
+    },
+    {
+      "id": "mfgqh4rhvt477fd73x",
+      "name": "sagar kharal",
+      "phone": "8844736284",
+      "password": "sagar@123",
+      "role": "player",
+      "created_at": "2025-09-12T11:07:53.309Z"
+    }
+  ],
+  "teams": [
+    {
+      "id": "mfcs6vzoyasxprwqwm",
+      "captain_id": "mfcrb9oomwgnfkbxqq",
+      "team_name": "blazing crew",
+      "ground": "Dussehra Ground",
+      "members": [
+        "mfcrb9oomwgnfkbxqq"
+      ],
+      "created_at": "2025-09-09T16:44:49.908Z"
+    },
+    {
+      "id": "mfcsieyexa9y178ftlg",
+      "captain_id": "mfcshlsgmr8683kba9s",
+      "team_name": "rohan deshwal's Team",
+      "ground": "Dussehra Ground",
+      "members": [
+        "mfcshlsgmr8683kba9s"
+      ],
+      "created_at": "2025-09-09T16:53:47.702Z"
+    },
+    {
+      "id": "mfcsr9wbnp8tfy8l8rc",
+      "captain_id": "mfcsqw7oiukwvr60jz",
+      "team_name": "dasher 11",
+      "ground": "Dussehra Ground",
+      "members": [
+        "mfcsqw7oiukwvr60jz"
+      ],
+      "created_at": "2025-09-09T17:00:41.051Z"
+    },
+    {
+      "id": "mfct1hxy8ddx5wfz6nq",
+      "captain_id": "mfct13sm2n33eg8zwxf",
+      "team_name": "sagar11",
+      "ground": "Dussehra Ground",
+      "members": [
+        "mfct13sm2n33eg8zwxf"
+      ],
+      "created_at": "2025-09-09T17:08:38.038Z"
+    },
+    {
+      "id": "mfctpuxw571jjpuc1mk",
+      "captain_id": "mfctpavj9ki16rp3pvd",
+      "team_name": "kucjs61",
+      "ground": "Dussehra Ground",
+      "members": [
+        "mfctpavj9ki16rp3pvd"
+      ],
+      "created_at": "2025-09-09T17:27:34.628Z"
+    },
+    {
+      "id": "mfdfxjtez3b22ddfk9",
+      "captain_id": "mfdfwukbeahd7enopy",
+      "team_name": "zishan11",
+      "ground": "Dussehra Ground",
+      "members": [
+        "mfdfwukbeahd7enopy"
+      ],
+      "created_at": "2025-09-10T03:49:25.010Z"
+    },
+    {
+      "id": "mffi1rq7yxqwj3a3dt",
+      "captain_id": "mffi1e2nn8w5klr7mfr",
+      "team_name": "lucky11",
+      "ground": "Dussehra Ground",
+      "members": [
+        "mffi1e2nn8w5klr7mfr"
+      ],
+      "created_at": "2025-09-11T14:24:13.471Z"
+    },
+    {
+      "id": "mfgqhm9nw4zcu3invmf",
+      "captain_id": "mfgqh4rhvt477fd73x",
+      "team_name": "sagar kharal 11",
+      "ground": "Dussehra Ground",
+      "members": [
+        "mfgqh4rhvt477fd73x"
+      ],
+      "created_at": "2025-09-12T11:08:15.995Z"
+    }
+  ],
+  "availabilityPosts": [
+    {
+      "id": "mfcs6vzqyx4m629amj",
+      "team_id": "mfcs6vzoyasxprwqwm",
+      "captain_id": "mfcrb9oomwgnfkbxqq",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-09T16:44:49.910Z"
+    },
+    {
+      "id": "mfcsieyf0huqyjk5fjth",
+      "team_id": "mfcsieyexa9y178ftlg",
+      "captain_id": "mfcshlsgmr8683kba9s",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-09T16:53:47.703Z"
+    },
+    {
+      "id": "mfctpuxyt15ua2i85hj",
+      "team_id": "mfctpuxw571jjpuc1mk",
+      "captain_id": "mfctpavj9ki16rp3pvd",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-09T17:27:34.630Z"
+    },
+    {
+      "id": "mfcu8aq6slz8ez2pzkj",
+      "team_id": "mfcs6vzoyasxprwqwm",
+      "captain_id": "mfcrb9oomwgnfkbxqq",
+      "day": "SUNDAY",
+      "date": "2025-09-21",
+      "bet_amount": "600-800",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-09T17:41:54.894Z"
+    },
+    {
+      "id": "mfcu9fzdznf88daxhp",
+      "team_id": "mfct1hxy8ddx5wfz6nq",
+      "captain_id": "mfct13sm2n33eg8zwxf",
+      "day": "SUNDAY",
+      "date": "2025-09-21",
+      "bet_amount": "600-800",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-09T17:42:48.361Z"
+    },
+    {
+      "id": "mfdfy24rv9wrqo9o8cr",
+      "team_id": "mfdfxjtez3b22ddfk9",
+      "captain_id": "mfdfwukbeahd7enopy",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-10T03:49:48.747Z"
+    },
+    {
+      "id": "mfdlv6efqouwfidwok9",
+      "team_id": "mfcsieyexa9y178ftlg",
+      "captain_id": "mfcshlsgmr8683kba9s",
+      "day": "SUNDAY",
+      "date": "2025-09-21",
+      "bet_amount": "Friendly Match",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-10T06:35:32.007Z"
+    },
+    {
+      "id": "mfdlw7mudl1pjb9x4r",
+      "team_id": "mfcs6vzoyasxprwqwm",
+      "captain_id": "mfcrb9oomwgnfkbxqq",
+      "day": "SUNDAY",
+      "date": "2025-09-21",
+      "bet_amount": "Friendly Match",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-10T06:36:20.262Z"
+    },
+    {
+      "id": "mffi1rqa61c5dr1llh",
+      "team_id": "mffi1rq7yxqwj3a3dt",
+      "captain_id": "mffi1e2nn8w5klr7mfr",
+      "day": "SUNDAY",
+      "date": "2025-10-05",
+      "bet_amount": "600-800",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-11T14:24:13.474Z"
+    },
+    {
+      "id": "mffmzs200ekk5vo5ucym",
+      "team_id": "mfcs6vzoyasxprwqwm",
+      "captain_id": "mfcrb9oomwgnfkbxqq",
+      "day": "SUNDAY",
+      "date": "2025-10-05",
+      "bet_amount": "600-800",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-11T16:42:38.664Z"
+    },
+    {
+      "id": "mfgqg8x76vue2p3nisg",
+      "team_id": "mfcs6vzoyasxprwqwm",
+      "captain_id": "mfcrb9oomwgnfkbxqq",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-12T11:07:12.043Z"
+    },
+    {
+      "id": "mfgqhm9qq322lhm0o8e",
+      "team_id": "mfgqhm9nw4zcu3invmf",
+      "captain_id": "mfgqh4rhvt477fd73x",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "time_slot": "",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "matched",
+      "created_at": "2025-09-12T11:08:15.998Z"
+    }
+  ],
+  "matches": [
+    {
+      "id": "mfctpuy2klf51ssb43e",
+      "team1_id": "mfctpuxw571jjpuc1mk",
+      "team2_id": "mfcs6vzoyasxprwqwm",
+      "captain1_id": "mfctpavj9ki16rp3pvd",
+      "captain2_id": "mfcrb9oomwgnfkbxqq",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "confirmed",
+      "captain1_confirmed": true,
+      "captain2_confirmed": true,
+      "created_at": "2025-09-09T17:27:34.634Z"
+    },
+    {
+      "id": "mfcu9fzhbsdqt5ojz7h",
+      "team1_id": "mfct1hxy8ddx5wfz6nq",
+      "team2_id": "mfcs6vzoyasxprwqwm",
+      "captain1_id": "mfct13sm2n33eg8zwxf",
+      "captain2_id": "mfcrb9oomwgnfkbxqq",
+      "day": "SUNDAY",
+      "date": "2025-09-21",
+      "bet_amount": "600-800",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "confirmed",
+      "captain1_confirmed": true,
+      "captain2_confirmed": true,
+      "created_at": "2025-09-09T17:42:48.365Z"
+    },
+    {
+      "id": "mfdfy24vs0dqrhxzvgt",
+      "team1_id": "mfdfxjtez3b22ddfk9",
+      "team2_id": "mfcsieyexa9y178ftlg",
+      "captain1_id": "mfdfwukbeahd7enopy",
+      "captain2_id": "mfcshlsgmr8683kba9s",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "confirmed",
+      "captain1_confirmed": true,
+      "captain2_confirmed": true,
+      "created_at": "2025-09-10T03:49:48.751Z"
+    },
+    {
+      "id": "mfdlw7o7em9fsqgxzsd",
+      "team1_id": "mfcs6vzoyasxprwqwm",
+      "team2_id": "mfcsieyexa9y178ftlg",
+      "captain1_id": "mfcrb9oomwgnfkbxqq",
+      "captain2_id": "mfcshlsgmr8683kba9s",
+      "day": "SUNDAY",
+      "date": "2025-09-21",
+      "bet_amount": "Friendly Match",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "proposed",
+      "captain1_confirmed": true,
+      "captain2_confirmed": false,
+      "created_at": "2025-09-10T06:36:20.311Z"
+    },
+    {
+      "id": "mffmzs3pqgl3e87tdlj",
+      "team1_id": "mfcs6vzoyasxprwqwm",
+      "team2_id": "mffi1rq7yxqwj3a3dt",
+      "captain1_id": "mfcrb9oomwgnfkbxqq",
+      "captain2_id": "mffi1e2nn8w5klr7mfr",
+      "day": "SUNDAY",
+      "date": "2025-10-05",
+      "bet_amount": "600-800",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "proposed",
+      "captain1_confirmed": true,
+      "captain2_confirmed": false,
+      "created_at": "2025-09-11T16:42:38.725Z"
+    },
+    {
+      "id": "mfgqhmcsq9j1vy9hm99",
+      "team1_id": "mfgqhm9nw4zcu3invmf",
+      "team2_id": "mfcs6vzoyasxprwqwm",
+      "captain1_id": "mfgqh4rhvt477fd73x",
+      "captain2_id": "mfcrb9oomwgnfkbxqq",
+      "day": "SUNDAY",
+      "date": "2025-09-14",
+      "bet_amount": "200-300",
+      "ground": "Dussehra Ground",
+      "ground_type": "free",
+      "status": "confirmed",
+      "captain1_confirmed": true,
+      "captain2_confirmed": true,
+      "created_at": "2025-09-12T11:08:16.108Z"
+    }
+  ],
+  "chats": [],
+  "chatMessages": [
+    {
+      "id": "mfctql9j9fuakw2lauk",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfctpavj9ki16rp3pvd",
+      "sender_name": "lucky",
+      "message": "hi bro",
+      "timestamp": "2025-09-09T17:28:08.743Z"
+    },
+    {
+      "id": "mfcu40bzqm87kiiyycs",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfctpavj9ki16rp3pvd",
+      "sender_name": "lucky",
+      "message": "hi",
+      "timestamp": "2025-09-09T17:38:34.799Z"
+    },
+    {
+      "id": "mfcu7svy50q3xdvjows",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hi done",
+      "timestamp": "2025-09-09T17:41:31.774Z"
+    },
+    {
+      "id": "mfcu9oesefkru5e2sf7",
+      "match_id": "mfcu9fzhbsdqt5ojz7h",
+      "sender_id": "mfct13sm2n33eg8zwxf",
+      "sender_name": "sagar bisht",
+      "message": "hi",
+      "timestamp": "2025-09-09T17:42:59.284Z"
+    },
+    {
+      "id": "mfcua2u5t09qmwh4s08",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hi",
+      "timestamp": "2025-09-09T17:43:17.981Z"
+    },
+    {
+      "id": "mfdlkuxhfjkjrn58ls",
+      "match_id": "mfdfy24vs0dqrhxzvgt",
+      "sender_id": "mfdfwukbeahd7enopy",
+      "sender_name": "zishan",
+      "message": "HI",
+      "timestamp": "2025-09-10T06:27:30.581Z"
+    },
+    {
+      "id": "mfdll318ba8s8fuf5e",
+      "match_id": "mfdfy24vs0dqrhxzvgt",
+      "sender_id": "mfdfwukbeahd7enopy",
+      "sender_name": "zishan",
+      "message": "BRO",
+      "timestamp": "2025-09-10T06:27:41.084Z"
+    },
+    {
+      "id": "mfdls7h9m7iouy07hs",
+      "match_id": "mfdfy24vs0dqrhxzvgt",
+      "sender_id": "mfdfwukbeahd7enopy",
+      "sender_name": "zishan",
+      "message": "HI",
+      "timestamp": "2025-09-10T06:33:13.437Z"
+    },
+    {
+      "id": "mfdlt8fbpiywl0pewqs",
+      "match_id": "mfdfy24vs0dqrhxzvgt",
+      "sender_id": "mfcshlsgmr8683kba9s",
+      "sender_name": "rohan deshwal",
+      "message": "hi",
+      "timestamp": "2025-09-10T06:34:01.319Z"
+    },
+    {
+      "id": "mffl88xhbxa2zuly6n",
+      "match_id": "mfcu9fzhbsdqt5ojz7h",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hnjj",
+      "timestamp": "2025-09-11T15:53:14.549Z"
+    },
+    {
+      "id": "mfflwtwlnct3b4hbfs",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hi",
+      "timestamp": "2025-09-11T16:12:21.477Z"
+    },
+    {
+      "id": "mffm8bdub828yw03t9g",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hi",
+      "timestamp": "2025-09-11T16:21:17.346Z"
+    },
+    {
+      "id": "mffm8frflty7qhohtqc",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hi",
+      "timestamp": "2025-09-11T16:21:23.019Z"
+    },
+    {
+      "id": "mffm8hqu7jxph14narc",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hooo",
+      "timestamp": "2025-09-11T16:21:25.590Z"
+    },
+    {
+      "id": "mffmhtt0x9juidcsuua",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hi",
+      "timestamp": "2025-09-11T16:28:41.124Z"
+    },
+    {
+      "id": "mffmyr8o79jmywakmuq",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "hi",
+      "timestamp": "2025-09-11T16:41:50.953Z"
+    },
+    {
+      "id": "mffmyxzadxpfbhruf9t",
+      "match_id": "mfctpuy2klf51ssb43e",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "match",
+      "timestamp": "2025-09-11T16:41:59.686Z"
+    },
+    {
+      "id": "mfgqi4kau5x2hg2bf9",
+      "match_id": "mfgqhmcsq9j1vy9hm99",
+      "sender_id": "mfgqh4rhvt477fd73x",
+      "sender_name": "sagar kharal",
+      "message": "hi match kab korge ?",
+      "timestamp": "2025-09-12T11:08:39.706Z"
+    },
+    {
+      "id": "mfgqiowdpinhl8qmhtb",
+      "match_id": "mfgqhmcsq9j1vy9hm99",
+      "sender_id": "mfcrb9oomwgnfkbxqq",
+      "sender_name": "Aman Bisht",
+      "message": "kal\\",
+      "timestamp": "2025-09-12T11:09:06.061Z"
+    }
+  ]
+}

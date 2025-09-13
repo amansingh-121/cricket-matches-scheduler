@@ -64,3 +64,63 @@
     </script>
 </body>
 </html>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Scheduler - Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="admin-app">
+        <header>
+            <h1>Cricket Scheduler - Admin Panel</h1>
+            <button onclick="loadAllMatches()">Refresh</button>
+        </header>
+
+        <div class="admin-content">
+            <div class="card">
+                <h3>All Matches</h3>
+                <div id="all-matches"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadAllMatches() {
+            try {
+                const response = await fetch('/api/admin/matches');
+                const matches = await response.json();
+                renderAllMatches(matches);
+            } catch (error) {
+                console.error('Failed to load matches');
+            }
+        }
+
+        function renderAllMatches(matches) {
+            const container = document.getElementById('all-matches');
+            if (matches.length === 0) {
+                container.innerHTML = '<p>No matches found.</p>';
+                return;
+            }
+
+            container.innerHTML = matches.map(match => `
+                <div class="match-item ${match.status}">
+                    <strong>${match.team1_name} vs ${match.team2_name}</strong>
+                    <br>Captains: ${match.captain1_name} vs ${match.captain2_name}
+                    <br>Day: ${match.day} | Bet: ₹${match.bet_amount}
+                    ${match.ground ? `<br>Ground: ${match.ground}` : ''}
+                    <br>Status: ${match.status.toUpperCase()}
+                    <br>Created: ${new Date(match.created_at).toLocaleString()}
+                    ${match.captain1_confirmed ? '<br>✓ Captain 1 Confirmed' : '<br>⏳ Captain 1 Pending'}
+                    ${match.captain2_confirmed ? '<br>✓ Captain 2 Confirmed' : '<br>⏳ Captain 2 Pending'}
+                </div>
+            `).join('');
+        }
+
+        // Load matches on page load
+        loadAllMatches();
+    </script>
+</body>
+</html>

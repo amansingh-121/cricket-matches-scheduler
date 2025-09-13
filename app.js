@@ -1,5 +1,7 @@
 class CricketScheduler {
     constructor() {
+        // Update API base URL to use your Render deployment
+        this.API_BASE_URL = 'https://cricket-match-scheduling.onrender.com';
         this.token = localStorage.getItem('token');
         this.user = JSON.parse(localStorage.getItem('user') || '{}');
         this.init();
@@ -86,7 +88,7 @@ class CricketScheduler {
         submitBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/login', {
+            const response = await fetch(`${this.API_BASE_URL}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone, password })
@@ -151,7 +153,7 @@ class CricketScheduler {
         submitBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/signup', {
+            const response = await fetch(`${this.API_BASE_URL}/api/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, phone, password, role })
@@ -206,8 +208,6 @@ class CricketScheduler {
         console.log('User logged out successfully');
     }
 
-
-
     toggleCustomBet(e) {
         const customGroup = document.getElementById('custom-bet-group');
         if (e.target.value === 'custom') {
@@ -261,7 +261,7 @@ class CricketScheduler {
         console.log('Token:', this.token ? 'Present' : 'Missing');
 
         try {
-            const response = await fetch('/api/availability/create', {
+            const response = await fetch(`${this.API_BASE_URL}/api/availability/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -334,7 +334,7 @@ class CricketScheduler {
         console.log('Posting paid availability:', { team_name, day, date, bet_amount, time_slot, ground, ground_type: 'paid' });
 
         try {
-            const response = await fetch('/api/availability/create', {
+            const response = await fetch(`${this.API_BASE_URL}/api/availability/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -370,7 +370,7 @@ class CricketScheduler {
 
     async handleMatchAction(matchId, action) {
         try {
-            const response = await fetch('/api/match/confirm', {
+            const response = await fetch(`${this.API_BASE_URL}/api/match/confirm`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -415,8 +415,6 @@ class CricketScheduler {
         document.getElementById('user-name').textContent = `${this.user.name} (${this.user.role})`;
     }
 
-
-
     async loadDashboardData() {
         await Promise.all([
             this.loadUserTeam(),
@@ -428,7 +426,7 @@ class CricketScheduler {
 
     async loadUserTeam() {
         try {
-            const response = await fetch('/api/user/team', {
+            const response = await fetch(`${this.API_BASE_URL}/api/user/team`, {
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
             const data = await response.json();
@@ -439,11 +437,9 @@ class CricketScheduler {
         }
     }
 
-
-
     async loadMatches() {
         try {
-            const response = await fetch('/api/matches', {
+            const response = await fetch(`${this.API_BASE_URL}/api/matches`, {
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
             const matches = await response.json();
@@ -453,12 +449,10 @@ class CricketScheduler {
         }
     }
 
-
-
     async loadOpenRequests() {
         try {
             console.log('Loading open requests...');
-            const response = await fetch('/api/availability/open?ground_type=free');
+            const response = await fetch(`${this.API_BASE_URL}/api/availability/open?ground_type=free`);
             console.log('Open requests response status:', response.status);
             
             if (!response.ok) {
@@ -490,7 +484,7 @@ class CricketScheduler {
 
     async loadPaidOpenRequests() {
         try {
-            const response = await fetch('/api/availability/open?ground_type=paid');
+            const response = await fetch(`${this.API_BASE_URL}/api/availability/open?ground_type=paid`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -526,16 +520,16 @@ class CricketScheduler {
         }
         
         // Show the availability cards container with smooth transition
-        availabilityCardsContainer.style.display = 'flex';
-        
-        // Trigger animation after display change
-        setTimeout(() => {
-            availabilityCardsContainer.style.opacity = '1';
-            availabilityCardsContainer.style.transform = 'translateY(0)';
-        }, 50);
+        if (availabilityCardsContainer) {
+            availabilityCardsContainer.style.display = 'flex';
+            
+            // Trigger animation after display change
+            setTimeout(() => {
+                availabilityCardsContainer.style.opacity = '1';
+                availabilityCardsContainer.style.transform = 'translateY(0)';
+            }, 50);
+        }
     }
-
-
 
     renderMatches(matches) {
         const container = document.getElementById('matches-list');
@@ -646,8 +640,6 @@ class CricketScheduler {
         }, 50);
     }
 
-
-
     renderOpenRequests(requests) {
         const container = document.getElementById('open-requests');
         console.log('Rendering open requests:', requests.length, 'requests');
@@ -699,8 +691,6 @@ class CricketScheduler {
             </div>
         `).join('');
     }
-
-
 
     // Chat functionality
     openChat(matchId, matchTitle) {
@@ -787,7 +777,7 @@ class CricketScheduler {
         if (!this.currentMatchId) return;
         
         try {
-            const response = await fetch(`/api/chat/${this.currentMatchId}`, {
+            const response = await fetch(`${this.API_BASE_URL}/api/chat/${this.currentMatchId}`, {
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
             
@@ -858,7 +848,7 @@ class CricketScheduler {
         sendBtn.textContent = 'Sending...';
         
         try {
-            const response = await fetch('/api/chat/send', {
+            const response = await fetch(`${this.API_BASE_URL}/api/chat/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -887,8 +877,6 @@ class CricketScheduler {
             sendBtn.textContent = 'Send';
         }
     }
-
-
 
     escapeHtml(text) {
         const div = document.createElement('div');

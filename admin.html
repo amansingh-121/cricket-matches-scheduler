@@ -22,13 +22,19 @@
     </div>
 
     <script>
+        // API Base URL for your Render deployment
+        const API_BASE_URL = 'https://cricket-match-scheduling.onrender.com';
+
         async function loadAllMatches() {
             try {
-                const response = await fetch('/api/admin/matches');
+                // Updated to use full Render URL instead of relative path
+                const response = await fetch(`${API_BASE_URL}/api/admin/matches`);
                 const matches = await response.json();
                 renderAllMatches(matches);
             } catch (error) {
-                console.error('Failed to load matches');
+                console.error('Failed to load matches:', error);
+                // Show error message to user
+                document.getElementById('all-matches').innerHTML = '<p style="color: red;">Error loading matches. Please check if the server is running.</p>';
             }
         }
 
@@ -57,4 +63,4 @@
         loadAllMatches();
     </script>
 </body>
-</html>
+</html>  

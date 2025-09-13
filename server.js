@@ -92,7 +92,7 @@ function authenticateToken(req, res, next) {
   });
 }
 
-app.post(' https://cricket-match-scheduler-1.onrender.com/api/signup', async (req, res) => {
+app.post('/api/signup', async (req, res) => {
   const { name, phone, password, role } = req.body;
   
   const existingUser = data.users.find(u => u.phone === phone);
@@ -117,7 +117,7 @@ app.post(' https://cricket-match-scheduler-1.onrender.com/api/signup', async (re
   res.json({ token, user: { id: user.id, name, role: user.role } });
 });
 
-app.post(' https://cricket-match-scheduler-1.onrender.com/api/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { phone, password } = req.body;
   const user = data.users.find(u => u.phone === phone);
   
@@ -133,12 +133,12 @@ app.post(' https://cricket-match-scheduler-1.onrender.com/api/login', async (req
   res.json({ token, user: { id: user.id, name: user.name, role: user.role } });
 });
 
-app.get(' https://cricket-match-scheduler-1.onrender.com/api/teams', authenticateToken, (req, res) => {
+app.get('/api/teams', authenticateToken, (req, res) => {
   const teams = data.teams.filter(t => t.captain_id === req.user.id);
   res.json(teams);
 });
 
-app.get(' https://cricket-match-scheduler-1.onrender.com/api/user/team', authenticateToken, (req, res) => {
+app.get('/api/user/team', authenticateToken, (req, res) => {
   const team = data.teams.find(t => t.captain_id === req.user.id);
   const user = data.users.find(u => u.id === req.user.id);
   
@@ -161,7 +161,7 @@ app.get(' https://cricket-match-scheduler-1.onrender.com/api/user/team', authent
   }
 });
 
-app.post(' https://cricket-match-scheduler-1.onrender.com/api/availability/create', authenticateToken, (req, res) => {
+app.post('/api/availability/create', authenticateToken, (req, res) => {
   console.log('=== AVAILABILITY CREATE REQUEST ===');
   console.log('Request body:', req.body);
   console.log('User ID:', req.user.id);
@@ -344,7 +344,7 @@ function tryMatch(newPost) {
   return null;
 }
 
-app.get(' https://cricket-match-scheduler-1.onrender.com/api/matches', authenticateToken, (req, res) => {
+app.get('/api/matches', authenticateToken, (req, res) => {
   const userTeams = data.teams.filter(t => t.captain_id === req.user.id);
   const userTeamIds = userTeams.map(t => t.id);
   
@@ -381,7 +381,7 @@ app.get(' https://cricket-match-scheduler-1.onrender.com/api/matches', authentic
   res.json(enrichedMatches);
 });
 
-app.post(' https://cricket-match-scheduler-1.onrender.com/api/match/confirm', authenticateToken, (req, res) => {
+app.post('/api/match/confirm', authenticateToken, (req, res) => {
   const { match_id, decision } = req.body;
   
   console.log('=== MATCH CONFIRMATION ===');
@@ -450,7 +450,7 @@ app.post(' https://cricket-match-scheduler-1.onrender.com/api/match/confirm', au
   res.json({ success: true, match });
 });
 
-app.get(' https://cricket-match-scheduler-1.onrender.com/api/availability/open', (req, res) => {
+app.get('/api/availability/open', (req, res) => {
   try {
     console.log('=== OPEN REQUESTS API CALLED ===');
     console.log('Query params:', req.query);
@@ -511,7 +511,7 @@ app.get(' https://cricket-match-scheduler-1.onrender.com/api/availability/open',
   }
 });
 
-app.get(' https://cricket-match-scheduler-1.onrender.com/api/admin/matches', (req, res) => {
+app.get('/api/admin/matches', (req, res) => {
   const enrichedMatches = data.matches.map(match => {
     const team1 = data.teams.find(t => t.id === match.team1_id);
     const team2 = data.teams.find(t => t.id === match.team2_id);
@@ -529,7 +529,7 @@ app.get(' https://cricket-match-scheduler-1.onrender.com/api/admin/matches', (re
 });
 
 // Chat endpoints
-app.get(' https://cricket-match-scheduler-1.onrender.com/api/chat/:matchId', authenticateToken, (req, res) => {
+app.get('/api/chat/:matchId', authenticateToken, (req, res) => {
   const { matchId } = req.params;
   
   console.log('=== CHAT MESSAGES REQUEST ===');
@@ -560,7 +560,7 @@ app.get(' https://cricket-match-scheduler-1.onrender.com/api/chat/:matchId', aut
   res.json(messages);
 });
 
-app.post(' https://cricket-match-scheduler-1.onrender.com/api/chat/send', authenticateToken, (req, res) => {
+app.post('/api/chat/send', authenticateToken, (req, res) => {
   const { match_id, message } = req.body;
   
   console.log('=== SEND MESSAGE REQUEST ===');
@@ -629,3 +629,4 @@ try {
 app.listen(PORT, () => {
   console.log(`Cricket Match Scheduler running on http://localhost:${PORT}`);
 });
+

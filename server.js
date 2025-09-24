@@ -109,8 +109,16 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Cricket Scheduler API is running', timestamp: new Date().toISOString() });
 });
 
-// Root endpoint
+
+
+
+// Serve frontend files
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// API info endpoint
+app.get('/api', (req, res) => {
   res.json({ 
     message: 'Cricket Match Scheduler API', 
     version: '1.0.0',
@@ -122,7 +130,8 @@ app.get('/', (req, res) => {
       admin: ['/api/admin/matches']
     }
   });
-});
+}); 
+
 
 app.post('/api/signup', async (req, res) => {
   const { name, phone, password, role } = req.body;

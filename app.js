@@ -1,13 +1,8 @@
 class CricketScheduler {
     constructor() {
-        // **IMPORTANT**: Remove localStorage usage as it's not supported in Claude.ai artifacts
-        // Use in-memory storage instead
-        this.token = null; // localStorage.getItem('token');
-        this.user = {}; // JSON.parse(localStorage.getItem('user') || '{}');
-        
-        // Add your Render API base URL
-        this.API_BASE_URL = 'https://cricket-matches-scheduler.onrender.com';
-        
+        this.apiBase = 'https://cricket-matches-scheduler.onrender.com'; // <<< UPDATE: Render backend base URL
+        this.token = localStorage.getItem('token');
+        this.user = JSON.parse(localStorage.getItem('user') || '{}');
         this.init();
     }
 
@@ -36,7 +31,7 @@ class CricketScheduler {
         
         // Custom ground toggle for paid ground
         document.getElementById('paid-ground').addEventListener('change', (e) => this.toggleCustomGround(e));
-        
+
         // Chat events
         document.getElementById('close-chat').addEventListener('click', () => this.closeChatModal());
         document.getElementById('send-message').addEventListener('click', () => this.sendMessage());
@@ -46,7 +41,6 @@ class CricketScheduler {
     }
 
     bindDynamicEvents() {
-        // Bind events to dynamically created chat buttons
         document.querySelectorAll('.chat-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const matchId = e.target.getAttribute('data-match-id');
@@ -56,8 +50,7 @@ class CricketScheduler {
                 }
             });
         });
-        
-        // Bind events to match action buttons
+
         document.querySelectorAll('.confirm-btn, .decline-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const matchId = e.target.getAttribute('data-match-id');
@@ -85,14 +78,13 @@ class CricketScheduler {
             return;
         }
 
-        // Show loading state
         const submitBtn = e.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Logging in...';
         submitBtn.disabled = true;
 
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/login`, {
+            const response = await fetch(`${this.apiBase}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone, password })
@@ -102,8 +94,8 @@ class CricketScheduler {
             if (response.ok) {
                 this.token = data.token;
                 this.user = data.user;
-                // **REMOVED**: localStorage.setItem('token', this.token);
-                // **REMOVED**: localStorage.setItem('user', JSON.stringify(this.user));
+                localStorage.setItem('token', this.token);
+                localStorage.setItem('user', JSON.stringify(this.user));
                 
                 document.getElementById('login-form').reset();
                 this.showDashboard();
@@ -120,7 +112,6 @@ class CricketScheduler {
         } catch (error) {
             alert('⚠️ Network error. Please check your connection and try again.');
         } finally {
-            // Reset button state
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
         }
@@ -133,7 +124,6 @@ class CricketScheduler {
         const password = document.getElementById('signup-password').value.trim();
         const role = document.getElementById('signup-role').value;
 
-        // Enhanced validation
         if (!name) {
             alert('Please enter your name');
             document.getElementById('signup-name').focus();
@@ -150,14 +140,13 @@ class CricketScheduler {
             return;
         }
 
-        // Show loading state
         const submitBtn = e.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Creating Account...';
         submitBtn.disabled = true;
 
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/signup`, {
+            const response = await fetch(`${this.apiBase}/api/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, phone, password, role })
@@ -167,8 +156,8 @@ class CricketScheduler {
             if (response.ok) {
                 this.token = data.token;
                 this.user = data.user;
-                // **REMOVED**: localStorage.setItem('token', this.token);
-                // **REMOVED**: localStorage.setItem('user', JSON.stringify(this.user));
+                localStorage.setItem('token', this.token);
+                localStorage.setItem('user', JSON.stringify(this.user));
                 
                 document.getElementById('signup-form').reset();
                 alert(`🎉 Welcome ${data.user.name}!\n\nYour account has been created successfully.\n\nYou can now start posting availability and finding matches!`);
@@ -184,7 +173,6 @@ class CricketScheduler {
         } catch (error) {
             alert('⚠️ Network error. Please check your connection and try again.');
         } finally {
-            // Reset button state
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
         }
@@ -193,17 +181,15 @@ class CricketScheduler {
     handleLogout() {
         this.token = null;
         this.user = {};
-        // **REMOVED**: localStorage.removeItem('token');
-        // **REMOVED**: localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         
-        // Clear all form data
         document.getElementById('login-form').reset();
         document.getElementById('signup-form').reset();
         if (document.getElementById('availability-form')) {
             document.getElementById('availability-form').reset();
         }
         
-        // Clear dashboard content
         document.getElementById('teams-list').innerHTML = '';
         document.getElementById('matches-list').innerHTML = '';
         document.getElementById('open-requests').innerHTML = '';
@@ -241,7 +227,6 @@ class CricketScheduler {
         const time_slot = document.getElementById('time-slot').value;
         const ground = document.getElementById('ground').value;
         
-        // Validation
         if (!day) {
             alert('Please select a day');
             return;
@@ -251,7 +236,6 @@ class CricketScheduler {
             return;
         }
         
-        // Handle custom bet amount
         if (bet_amount === 'custom') {
             const customAmount = document.getElementById('custom-bet-amount').value.trim();
             if (!customAmount) {
@@ -265,7 +249,7 @@ class CricketScheduler {
         console.log('Token:', this.token ? 'Present' : 'Missing');
 
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/availability/create`, {
+            const response = await fetch(`${this.apiBase}/api/availability/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -281,7 +265,6 @@ class CricketScheduler {
             
             if (response.ok) {
                 document.getElementById('availability-form').reset();
-                // Force reload all data to show updated information
                 await this.loadMatches();
                 await this.loadOpenRequests();
                 await this.loadPaidOpenRequests();
@@ -292,7 +275,6 @@ class CricketScheduler {
                     alert(result.message);
                 }
                 
-                // Force refresh after a small delay to ensure data is updated
                 setTimeout(() => {
                     this.loadOpenRequests();
                 }, 500);
@@ -314,8 +296,7 @@ class CricketScheduler {
         const bet_amount = 'contact the opposite captain';
         const time_slot = document.getElementById('paid-time-slot').value;
         let ground = document.getElementById('paid-ground').value;
-        
-        // Validation
+
         if (!day) {
             alert('Please select a day');
             return;
@@ -324,8 +305,7 @@ class CricketScheduler {
             alert('Please select a ground');
             return;
         }
-        
-        // Handle custom ground name
+
         if (ground === 'custom') {
             const customGround = document.getElementById('custom-ground-name').value.trim();
             if (!customGround) {
@@ -338,7 +318,7 @@ class CricketScheduler {
         console.log('Posting paid availability:', { team_name, day, date, bet_amount, time_slot, ground, ground_type: 'paid' });
 
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/availability/create`, {
+            const response = await fetch(`${this.apiBase}/api/availability/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -374,7 +354,7 @@ class CricketScheduler {
 
     async handleMatchAction(matchId, action) {
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/match/confirm`, {
+            const response = await fetch(`${this.apiBase}/api/match/confirm`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -392,7 +372,6 @@ class CricketScheduler {
                     alert('❌ Match declined. The availability posts have been reopened for new matches.');
                 }
                 
-                // Refresh all data to show updated status
                 await this.loadMatches();
                 await this.loadOpenRequests();
                 await this.loadPaidOpenRequests();
@@ -408,8 +387,6 @@ class CricketScheduler {
     showAuth() {
         document.getElementById('auth-section').classList.remove('hidden');
         document.getElementById('dashboard-section').classList.add('hidden');
-        
-        // Clear any existing user data display
         document.getElementById('user-name').textContent = '';
     }
 
@@ -430,11 +407,10 @@ class CricketScheduler {
 
     async loadUserTeam() {
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/user/team`, {
+            const response = await fetch(`${this.apiBase}/api/user/team`, {
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
             const data = await response.json();
-            
             this.renderUserTeam(data);
         } catch (error) {
             console.error('Failed to load user team');
@@ -443,7 +419,7 @@ class CricketScheduler {
 
     async loadMatches() {
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/matches`, {
+            const response = await fetch(`${this.apiBase}/api/matches`, {
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
             const matches = await response.json();
@@ -456,7 +432,7 @@ class CricketScheduler {
     async loadOpenRequests() {
         try {
             console.log('Loading open requests...');
-            const response = await fetch(`${this.API_BASE_URL}/api/availability/open?ground_type=free`);
+            const response = await fetch(`${this.apiBase}/api/availability/open?ground_type=free`);
             console.log('Open requests response status:', response.status);
             
             if (!response.ok) {
@@ -473,7 +449,6 @@ class CricketScheduler {
             const requests = await response.json();
             console.log('Open requests data received:', requests);
             console.log('Number of requests:', requests.length);
-            
             this.renderOpenRequests(requests);
         } catch (error) {
             console.error('Failed to load open requests:', error);
@@ -488,17 +463,14 @@ class CricketScheduler {
 
     async loadPaidOpenRequests() {
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/availability/open?ground_type=paid`);
-            
+            const response = await fetch(`${this.apiBase}/api/availability/open?ground_type=paid`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 throw new Error('Server returned HTML instead of JSON');
             }
-            
             const requests = await response.json();
             this.renderPaidOpenRequests(requests);
         } catch (error) {
@@ -514,8 +486,6 @@ class CricketScheduler {
         
         if (data.hasTeam && data.team) {
             container.innerHTML = `Team: ${data.team.name} | Ground: ${data.team.ground || 'Not set'}`;
-            
-            // Pre-fill ground if team has default ground
             if (data.team.ground) {
                 document.getElementById('ground').placeholder = `Default: ${data.team.ground}`;
             }
@@ -523,10 +493,7 @@ class CricketScheduler {
             container.innerHTML = 'No team yet - will be created when you post availability';
         }
         
-        // Show the availability cards container with smooth transition
         availabilityCardsContainer.style.display = 'flex';
-        
-        // Trigger animation after display change
         setTimeout(() => {
             availabilityCardsContainer.style.opacity = '1';
             availabilityCardsContainer.style.transform = 'translateY(0)';
@@ -550,7 +517,6 @@ class CricketScheduler {
             return;
         }
         
-        // Add dynamic classes for layout optimization
         if (matchesCard) matchesCard.classList.remove('empty-matches');
         if (dynamicLayout) {
             dynamicLayout.classList.add('has-matches');
@@ -558,16 +524,12 @@ class CricketScheduler {
         }
         if (availabilityContainer) availabilityContainer.classList.add('slide-up');
 
-        // Sort matches by date (earliest first), then by creation time
         matches.sort((a, b) => {
-            // If both have dates, sort by date
             if (a.date && b.date) {
                 return new Date(a.date) - new Date(b.date);
             }
-            // If only one has date, prioritize the one with date
             if (a.date && !b.date) return -1;
             if (!a.date && b.date) return 1;
-            // If neither has date, sort by creation time (newest first)
             return new Date(b.created_at) - new Date(a.created_at);
         });
 
@@ -577,7 +539,6 @@ class CricketScheduler {
             const myConfirmation = match.captain1_id === this.user.id ? match.captain1_confirmed : match.captain2_confirmed;
             const otherConfirmation = match.captain1_id === this.user.id ? match.captain2_confirmed : match.captain1_confirmed;
             
-            // Status display logic
             let statusDisplay = match.status.toUpperCase();
             if (match.status === 'proposed') {
                 if (myConfirmation && otherConfirmation) {
@@ -591,16 +552,12 @@ class CricketScheduler {
                 }
             }
             
-            // Contact details and chat for matched teams (proposed or confirmed)
             let contactInfo = '';
             let chatButton = '';
             if ((match.status === 'proposed' || match.status === 'confirmed') && isMyMatch) {
-                // Show chat button for all matched teams - using data attributes instead of onclick
                 chatButton = `
                     <button class="chat-btn" data-match-id="${match.id}" data-match-title="${match.team1_name} vs ${match.team2_name}">💬 Chat with Opponent</button>
                 `;
-                
-                // Show contact info for proposed and confirmed matches
                 if (match.opponent_contact) {
                     contactInfo = `
                         <div class="contact-info">
@@ -630,10 +587,8 @@ class CricketScheduler {
             `;
         }).join('');
         
-        // Add event listeners to dynamically created buttons
         this.bindDynamicEvents();
-        
-        // Add smooth animation to new match items
+
         setTimeout(() => {
             const matchItems = container.querySelectorAll('.match-item');
             matchItems.forEach((item, index) => {
@@ -676,12 +631,10 @@ class CricketScheduler {
 
     renderPaidOpenRequests(requests) {
         const container = document.getElementById('paid-open-requests');
-        
         if (requests.length === 0) {
             container.innerHTML = '<p>No paid ground requests available.</p>';
             return;
         }
-
         container.innerHTML = requests.map(request => `
             <div class="request-item paid-request">
                 <strong>${request.team_name}</strong> by ${request.captain_name}
@@ -694,7 +647,6 @@ class CricketScheduler {
         `).join('');
     }
 
-    // Chat functionality
     openChat(matchId, matchTitle) {
         console.log('Opening chat for match:', matchId, 'Title:', matchTitle);
         
@@ -704,14 +656,11 @@ class CricketScheduler {
             return;
         }
         
-        // Clear any existing interval
         if (this.chatInterval) {
             clearInterval(this.chatInterval);
         }
         
         this.currentMatchId = matchId;
-        
-        // Update chat title and show modal
         const chatTitle = document.getElementById('chat-title');
         const chatModal = document.getElementById('chat-modal');
         
@@ -724,7 +673,6 @@ class CricketScheduler {
         chatTitle.textContent = `Chat: ${matchTitle}`;
         chatModal.classList.remove('hidden');
         
-        // Clear previous messages and load new ones
         const messagesContainer = document.getElementById('chat-messages');
         if (messagesContainer) {
             messagesContainer.innerHTML = '<p style="text-align: center; color: #666;">Loading messages...</p>';
@@ -732,21 +680,19 @@ class CricketScheduler {
         
         this.loadChatMessages();
         
-        // Focus on message input
         setTimeout(() => {
             const messageInput = document.getElementById('message-input');
             if (messageInput) {
                 messageInput.focus();
             }
         }, 100);
-        
-        // Auto-refresh messages every 3 seconds while chat is open
+
         this.chatInterval = setInterval(() => {
             if (this.currentMatchId === matchId) {
                 this.loadChatMessages();
             }
         }, 3000);
-        
+
         console.log('Chat opened successfully');
     }
 
@@ -760,13 +706,11 @@ class CricketScheduler {
         
         this.currentMatchId = null;
         
-        // Clear auto-refresh interval
         if (this.chatInterval) {
             clearInterval(this.chatInterval);
             this.chatInterval = null;
         }
         
-        // Clear message input
         const messageInput = document.getElementById('message-input');
         if (messageInput) {
             messageInput.value = '';
@@ -779,7 +723,7 @@ class CricketScheduler {
         if (!this.currentMatchId) return;
         
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/chat/${this.currentMatchId}`, {
+            const response = await fetch(`${this.apiBase}/api/chat/${this.currentMatchId}`, {
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
             
@@ -827,7 +771,6 @@ class CricketScheduler {
             `;
         }).join('');
         
-        // Scroll to bottom only if user was already at bottom or it's a new message
         if (isScrolledToBottom || messages.length === 1) {
             container.scrollTop = container.scrollHeight;
         }
@@ -845,12 +788,11 @@ class CricketScheduler {
             return;
         }
         
-        // Disable send button to prevent double sending
         sendBtn.disabled = true;
         sendBtn.textContent = 'Sending...';
         
         try {
-            const response = await fetch(`${this.API_BASE_URL}/api/chat/send`, {
+            const response = await fetch(`${this.apiBase}/api/chat/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -865,7 +807,7 @@ class CricketScheduler {
             if (response.ok) {
                 input.value = '';
                 await this.loadChatMessages();
-                input.focus(); // Keep focus on input for continuous chatting
+                input.focus();
             } else {
                 const errorData = await response.json();
                 alert('Failed to send message: ' + (errorData.error || 'Unknown error'));
@@ -874,7 +816,6 @@ class CricketScheduler {
             console.error('Send message error:', error);
             alert('Failed to send message. Please check your connection.');
         } finally {
-            // Re-enable send button
             sendBtn.disabled = false;
             sendBtn.textContent = 'Send';
         }
@@ -898,3 +839,5 @@ class CricketScheduler {
 
 // Initialize app
 const app = new CricketScheduler();
+
+

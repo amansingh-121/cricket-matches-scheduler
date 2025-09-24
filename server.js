@@ -14,7 +14,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://cricket-matches-scheduler.onrender.com',
-    'https://your-netlify-frontend-url.netlify.app' // Replace with your actual Netlify URL
+    'https://YOUR_NETLIFY_URL.netlify.app' // <-- CHANGE THIS TO YOUR NETLIFY URL
   ],
   credentials: true
 }));
@@ -84,7 +84,7 @@ function removeDuplicatePosts() {
   data.availabilityPosts = data.availabilityPosts.filter(post => {
     const key = `${post.team_id}-${post.day}-${post.bet_amount}-${post.ground}-${post.ground_type || 'free'}-${post.status}`;
     if (seen.has(key) && post.status === 'open') {
-      return false; // Remove duplicate
+      return false;
     }
     seen.add(key);
     return true;
@@ -109,9 +109,6 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Cricket Scheduler API is running', timestamp: new Date().toISOString() });
 });
 
-
-
-
 // Serve frontend files
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -130,8 +127,7 @@ app.get('/api', (req, res) => {
       admin: ['/api/admin/matches']
     }
   });
-}); 
-
+});
 
 app.post('/api/signup', async (req, res) => {
   const { name, phone, password, role } = req.body;
@@ -295,7 +291,6 @@ function tryMatch(newPost) {
   let candidates;
   
   if (newPost.ground_type === 'paid') {
-    // For paid grounds, match on day, ground, and bet compatibility
     candidates = data.availabilityPosts.filter(p => {
       const matches = p.id !== newPost.id &&
         p.status === 'open' &&
@@ -307,21 +302,9 @@ function tryMatch(newPost) {
         (p.bet_amount === newPost.bet_amount || 
          p.bet_amount === 'contact the opposite captain' || 
          newPost.bet_amount === 'contact the opposite captain');
-      
-      console.log(`Checking paid candidate ${p.id}: matches=${matches}`, {
-        sameDay: p.day === newPost.day,
-        sameGround: p.ground === newPost.ground,
-        isPaid: (p.ground_type || 'free') === 'paid',
-        differentTeam: p.team_id !== newPost.team_id,
-        betCompatible: (p.bet_amount === newPost.bet_amount || 
-                       p.bet_amount === 'contact the opposite captain' || 
-                       newPost.bet_amount === 'contact the opposite captain')
-      });
-      
       return matches;
     });
   } else {
-    // For free grounds, match on day, bet amount, and ground
     candidates = data.availabilityPosts.filter(p => {
       const matches = p.id !== newPost.id &&
         p.status === 'open' &&
@@ -331,26 +314,12 @@ function tryMatch(newPost) {
         (p.ground_type || 'free') === (newPost.ground_type || 'free') &&
         p.team_id !== newPost.team_id &&
         p.captain_id !== newPost.captain_id;
-      
-      console.log(`Checking free candidate ${p.id}: matches=${matches}`, {
-        sameDay: p.day === newPost.day,
-        sameBet: p.bet_amount === newPost.bet_amount,
-        sameGround: p.ground === newPost.ground,
-        sameGroundType: (p.ground_type || 'free') === (newPost.ground_type || 'free'),
-        differentTeam: p.team_id !== newPost.team_id
-      });
-      
       return matches;
     });
   }
   
-  console.log('Found candidates:', candidates.length);
-  candidates.forEach(c => console.log('Candidate:', c));
-  
   if (candidates.length > 0) {
     const matchedPost = candidates[0];
-    console.log('Matched with:', matchedPost);
-    
     const match = {
       id: generateId(),
       team1_id: newPost.team_id,
@@ -367,21 +336,15 @@ function tryMatch(newPost) {
       captain2_confirmed: false,
       created_at: new Date().toISOString()
     };
-    
-    console.log('Creating match:', match);
     data.matches.push(match);
-    
-    // Mark both posts as matched
+
     newPost.status = 'matched';
     matchedPost.status = 'matched';
-    
+
     saveData();
-    console.log('Match created and saved');
-    
     return match;
   }
   
-  console.log('No match found');
   return null;
 }
 
@@ -403,7 +366,6 @@ app.get('/api/matches', authenticateToken, (req, res) => {
     const captain1 = data.users.find(u => u.id === match.captain1_id);
     const captain2 = data.users.find(u => u.id === match.captain2_id);
     
-    // Determine opponent contact based on current user
     let opponent_contact = null;
     if (match.captain1_id === req.user.id) {
       opponent_contact = { name: captain2?.name, phone: captain2?.phone };
@@ -425,17 +387,10 @@ app.get('/api/matches', authenticateToken, (req, res) => {
 app.post('/api/match/confirm', authenticateToken, (req, res) => {
   const { match_id, decision } = req.body;
   
-  console.log('=== MATCH CONFIRMATION ===');
-  console.log('Match ID:', match_id);
-  console.log('Decision:', decision);
-  console.log('User ID:', req.user.id);
-  
   const match = data.matches.find(m => m.id === match_id);
   if (!match) {
     return res.status(404).json({ error: 'Match not found' });
   }
-  
-  console.log('Found match:', match);
   
   if (match.captain1_id !== req.user.id && match.captain2_id !== req.user.id) {
     return res.status(403).json({ error: 'Not authorized' });
@@ -444,25 +399,16 @@ app.post('/api/match/confirm', authenticateToken, (req, res) => {
   if (decision === 'confirm') {
     if (match.captain1_id === req.user.id) {
       match.captain1_confirmed = true;
-      console.log('Captain 1 confirmed');
     } else {
       match.captain2_confirmed = true;
-      console.log('Captain 2 confirmed');
     }
-    
-    // Check if both captains have confirmed
     if (match.captain1_confirmed && match.captain2_confirmed) {
       match.status = 'confirmed';
-      console.log('Match fully confirmed by both captains');
     } else {
-      match.status = 'proposed'; // Keep as proposed until both confirm
-      console.log('Match partially confirmed, waiting for other captain');
+      match.status = 'proposed';
     }
   } else if (decision === 'decline') {
     match.status = 'cancelled';
-    console.log('Match cancelled');
-    
-    // Find and reopen the availability posts
     const post1 = data.availabilityPosts.find(p => 
       p.team_id === match.team1_id && 
       p.status === 'matched' &&
@@ -475,79 +421,46 @@ app.post('/api/match/confirm', authenticateToken, (req, res) => {
       p.day === match.day &&
       p.bet_amount === match.bet_amount
     );
-    
     if (post1) {
       post1.status = 'open';
-      console.log('Reopened post 1:', post1.id);
     }
     if (post2) {
       post2.status = 'open';
-      console.log('Reopened post 2:', post2.id);
     }
   }
   
   saveData();
-  console.log('Match updated and saved');
   res.json({ success: true, match });
 });
 
 app.get('/api/availability/open', (req, res) => {
   try {
-    console.log('=== OPEN REQUESTS API CALLED ===');
-    console.log('Query params:', req.query);
-    
-    // Ensure data is loaded
     if (!data || !data.availabilityPosts) {
       loadData();
     }
-    
     cleanupExpiredPosts();
     removeDuplicatePosts();
     saveData();
-    
+
     const ground_type = req.query.ground_type || 'free';
-    console.log('Filtering for ground_type:', ground_type);
-    console.log('Total availability posts:', data.availabilityPosts.length);
-    
-    // Debug: Show all posts with their status and ground_type
-    data.availabilityPosts.forEach((post, index) => {
-      console.log(`Post ${index + 1}:`, {
-        id: post.id,
-        status: post.status,
-        ground_type: post.ground_type || 'free',
-        day: post.day,
-        bet_amount: post.bet_amount
-      });
-    });
-    
+
     const openPosts = data.availabilityPosts.filter(p => {
-      const matches = p.status === 'open' && (p.ground_type || 'free') === ground_type;
-      console.log(`Post ${p.id}: status=${p.status}, ground_type=${p.ground_type || 'free'}, matches=${matches}`);
-      return matches;
+      return p.status === 'open' && (p.ground_type || 'free') === ground_type;
     });
-    
-    console.log('Open posts found:', openPosts.length);
-    console.log('Open posts details:', openPosts);
     
     const enrichedPosts = openPosts.map(post => {
       const team = data.teams.find(t => t.id === post.team_id);
       const captain = data.users.find(u => u.id === post.captain_id);
-      
-      const enriched = {
+      return {
         ...post,
         team_name: team?.team_name || 'Unknown Team',
         captain_name: captain?.name || 'Unknown Captain',
         captain_phone: captain?.phone || 'N/A'
       };
-      
-      console.log('Enriched post:', enriched);
-      return enriched;
     });
     
-    console.log('Sending enriched posts:', enrichedPosts.length);
     res.json(enrichedPosts);
   } catch (error) {
-    console.error('Error in /api/availability/open:', error);
     res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 });
@@ -572,73 +485,40 @@ app.get('/api/admin/matches', (req, res) => {
 // Chat endpoints
 app.get('/api/chat/:matchId', authenticateToken, (req, res) => {
   const { matchId } = req.params;
-  
-  console.log('=== CHAT MESSAGES REQUEST ===');
-  console.log('Match ID:', matchId);
-  console.log('User ID:', req.user.id);
-  
   const match = data.matches.find(m => m.id === matchId);
   if (!match) {
-    console.log('Match not found for ID:', matchId);
     return res.status(404).json({ error: 'Match not found' });
   }
-  
-  console.log('Match found:', match.team1_name, 'vs', match.team2_name);
-  
   if (match.captain1_id !== req.user.id && match.captain2_id !== req.user.id) {
-    console.log('User not authorized for this match');
     return res.status(403).json({ error: 'Not authorized' });
   }
-  
   if (!data.chatMessages) {
     data.chatMessages = [];
   }
-  
   const messages = data.chatMessages.filter(msg => msg.match_id === matchId)
     .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-  
-  console.log('Found', messages.length, 'messages for match');
   res.json(messages);
 });
 
 app.post('/api/chat/send', authenticateToken, (req, res) => {
   const { match_id, message } = req.body;
-  
-  console.log('=== SEND MESSAGE REQUEST ===');
-  console.log('Match ID:', match_id);
-  console.log('User ID:', req.user.id);
-  console.log('Message:', message);
-  
   if (!message || !message.trim()) {
-    console.log('Empty message received');
     return res.status(400).json({ error: 'Message cannot be empty' });
   }
-  
   const match = data.matches.find(m => m.id === match_id);
   if (!match) {
-    console.log('Match not found for ID:', match_id);
     return res.status(404).json({ error: 'Match not found' });
   }
-  
-  console.log('Match found:', match.team1_name, 'vs', match.team2_name);
-  
   if (match.captain1_id !== req.user.id && match.captain2_id !== req.user.id) {
-    console.log('User not authorized for this match');
     return res.status(403).json({ error: 'Not authorized' });
   }
-  
   const user = data.users.find(u => u.id === req.user.id);
   if (!user) {
-    console.log('User not found for ID:', req.user.id);
     return res.status(404).json({ error: 'User not found' });
   }
-  
-  console.log('Sender:', user.name);
-  
   if (!data.chatMessages) {
     data.chatMessages = [];
   }
-  
   const chatMessage = {
     id: generateId(),
     match_id,
@@ -648,12 +528,8 @@ app.post('/api/chat/send', authenticateToken, (req, res) => {
     timestamp: new Date().toISOString()
   };
   
-  console.log('Creating chat message:', chatMessage);
-  
   data.chatMessages.push(chatMessage);
   saveData();
-  
-  console.log('Message saved successfully');
   res.json({ success: true });
 });
 

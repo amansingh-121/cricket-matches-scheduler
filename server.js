@@ -2,10 +2,22 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
-const JWT_SECRET = 'cricket_secret_key';
+// Use environment PORT for production deployment, fallback to 3000 for local development
+const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET || 'cricket_secret_key';
+
+// Add CORS middleware for cross-origin requests
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://cricket-matches-scheduler.onrender.com',
+    'https://your-netlify-frontend-url.netlify.app' // Replace with your actual Netlify URL
+  ],
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(express.static(__dirname));
@@ -91,6 +103,26 @@ function authenticateToken(req, res, next) {
     next();
   });
 }
+
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Cricket Scheduler API is running', timestamp: new Date().toISOString() });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Cricket Match Scheduler API', 
+    version: '1.0.0',
+    endpoints: {
+      auth: ['/api/login', '/api/signup'],
+      matches: ['/api/matches', '/api/match/confirm'],
+      availability: ['/api/availability/create', '/api/availability/open'],
+      chat: ['/api/chat/:matchId', '/api/chat/send'],
+      admin: ['/api/admin/matches']
+    }
+  });
+});
 
 app.post('/api/signup', async (req, res) => {
   const { name, phone, password, role } = req.body;
@@ -616,6 +648,17 @@ app.post('/api/chat/send', authenticateToken, (req, res) => {
   res.json({ success: true });
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// Handle 404 for unknown routes
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
 // Initialize data on startup
 try {
   loadData();
@@ -626,7 +669,8 @@ try {
   console.error('Error loading data on startup:', error);
 }
 
-app.listen(PORT, () => {
-  console.log(`Cricket Match Scheduler running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Cricket Match Scheduler running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Base URL: https://cricket-matches-scheduler.onrender.com`);
 });
-

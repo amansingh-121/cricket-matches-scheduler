@@ -1,14 +1,17 @@
 {
   "name": "cricket-scheduler",
   "version": "1.0.0",
-  "description": "Simple cricket match scheduler",
+  "description": "Cricket match scheduler with team management",
   "main": "server.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "jsonwebtoken": "^9.0.2"
   }
 }

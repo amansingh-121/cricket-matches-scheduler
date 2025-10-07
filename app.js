@@ -1,6 +1,9 @@
 class CricketScheduler {
     constructor() {
-        this.apiBase = 'https://cricket-matches-scheduler.onrender.com'; // <<< UPDATE: Render backend base URL
+        // Automatically use the correct API base URL for both local and production
+        this.apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000'
+            : 'https://cricket-matches-scheduler.onrender.com';
         this.token = localStorage.getItem('token');
         this.user = JSON.parse(localStorage.getItem('user') || '{}');
         this.init();

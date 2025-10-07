@@ -11,11 +11,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'cricket_secret_key';
 
 // Add CORS middleware for cross-origin requests
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://cricket-matches-scheduler.onrender.com',
-    'https://YOUR_NETLIFY_URL.netlify.app' // <-- CHANGE THIS TO YOUR NETLIFY URL
-  ],
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://cricket-matches-scheduler.onrender.com']
+    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
   credentials: true
 }));
 

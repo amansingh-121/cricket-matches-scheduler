@@ -22,9 +22,13 @@
     </div>
 
     <script>
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000'
+            : 'https://cricket-matches-scheduler.onrender.com';
+
         async function loadAllMatches() {
             try {
-                const response = await fetch('/api/admin/matches');
+                const response = await fetch(`${API_BASE}/api/admin/matches`);
                 const matches = await response.json();
                 renderAllMatches(matches);
             } catch (error) {

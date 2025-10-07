@@ -463,6 +463,7 @@ app.get('/api/availability/open', (req, res) => {
   }
 });
 
+// Admin endpoints
 app.get('/api/admin/matches', (req, res) => {
   const enrichedMatches = data.matches.map(match => {
     const team1 = data.teams.find(t => t.id === match.team1_id);
@@ -478,6 +479,80 @@ app.get('/api/admin/matches', (req, res) => {
     };
   });
   res.json(enrichedMatches);
+});
+
+app.get('/api/admin/users', (req, res) => {
+  res.json(data.users);
+});
+
+app.get('/api/admin/teams', (req, res) => {
+  const enrichedTeams = data.teams.map(team => {
+    const captain = data.users.find(u => u.id === team.captain_id);
+    return {
+      ...team,
+      captain_name: captain?.name,
+      captain_phone: captain?.phone
+    };
+  });
+  res.json(enrichedTeams);
+});
+
+app.get('/api/admin/availability', (req, res) => {
+  const enrichedPosts = data.availabilityPosts.map(post => {
+    const team = data.teams.find(t => t.id === post.team_id);
+    const captain = data.users.find(u => u.id === post.captain_id);
+    return {
+      ...post,
+      team_name: team?.team_name,
+      captain_name: captain?.name
+    };
+  });
+  res.json(enrichedPosts);
+});
+
+// Admin Delete endpoints
+app.delete('/api/admin/match/:id', (req, res) => {
+  const { id } = req.params;
+  const index = data.matches.findIndex(m => m.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Match not found' });
+  }
+  data.matches.splice(index, 1);
+  saveData();
+  res.json({ success: true, message: 'Match deleted' });
+});
+
+app.delete('/api/admin/user/:id', (req, res) => {
+  const { id } = req.params;
+  const index = data.users.findIndex(u => u.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  data.users.splice(index, 1);
+  saveData();
+  res.json({ success: true, message: 'User deleted' });
+});
+
+app.delete('/api/admin/team/:id', (req, res) => {
+  const { id } = req.params;
+  const index = data.teams.findIndex(t => t.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Team not found' });
+  }
+  data.teams.splice(index, 1);
+  saveData();
+  res.json({ success: true, message: 'Team deleted' });
+});
+
+app.delete('/api/admin/availability/:id', (req, res) => {
+  const { id } = req.params;
+  const index = data.availabilityPosts.findIndex(p => p.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Post not found' });
+  }
+  data.availabilityPosts.splice(index, 1);
+  saveData();
+  res.json({ success: true, message: 'Availability post deleted' });
 });
 
 // Chat endpoints

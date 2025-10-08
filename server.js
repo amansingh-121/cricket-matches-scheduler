@@ -734,28 +734,48 @@ async function startServer() {
   try {
     // Initialize database (MongoDB or File System)
     await initDatabase();
-    
+
     // Load existing data
     if (USE_MONGODB) {
-      await loadFromMongoDB();
-      console.log('✅ MongoDB data loaded successfully');
+      try {
+        await loadFromMongoDB();
+        console.log('✅ MongoDB data loaded successfully');
+      } catch (error) {
+        console.error('❌ Error loading from MongoDB:', error);
+        // If MongoDB fails, fall back to file system
+        if (fs.existsSync(DATA_FILE)) {
+          console.log('🔄 Falling back to file system data');
+          loadData();
+          removeDuplicatePosts();
+          saveData();
+        }
+      }
     } else {
-      loadData();
-      removeDuplicatePosts();
-      saveData();
-      console.log('✅ File system data loaded successfully');
+      // File system fallback
+      if (fs.existsSync(DATA_FILE)) {
+        loadData();
+        removeDuplicatePosts();
+        saveData();
+        console.log('✅ File system data loaded successfully');
+      } else {
+        console.log('ℹ️ No data file found, starting with empty data');
+        // Create empty data file if it doesn't exist
+        saveData();
+      }
     }
     
-    // Start server
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🏏 Cricket Match Scheduler running on port ${PORT}`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      if (process.env.NODE_ENV === 'production') {
-        console.log(`🚀 Base URL: https://cricket-matches-scheduler.onrender.com`);
-      } else {
-        console.log(`💻 Local URL: http://localhost:${PORT}`);
-      }
-      console.log(`${USE_MONGODB ? '✅ Data will be saved permanently in MongoDB' : '⚠️  Using local file storage (data resets on server restart)'}`);
+    // Start the server only after database is initialized
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Mode: ${USE_MONGODB ? 'MongoDB' : 'File System'}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+
+    // Handle unhandled promise rejections
+    process.on('unhandledRejection', (err) => {
+      console.error('Unhandled Rejection:', err);
+      // Close server & exit process
+      server.close(() => process.exit(1));
     });
   } catch (error) {
     console.error('❌ Error starting server:', error);

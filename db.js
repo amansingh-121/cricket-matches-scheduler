@@ -48,22 +48,48 @@ function saveFileData() {
   }
 }
 
-// Initialize
+// Initialize database connection
 async function initDatabase() {
   if (USE_MONGODB) {
     try {
-      await mongoose.connect(MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+      console.log('🔌 Connecting to MongoDB...');
+      
+      // Set up MongoDB connection events
+      mongoose.connection.on('connected', () => {
+        console.log('✅ MongoDB connected successfully');
       });
+
+      mongoose.connection.on('error', (err) => {
+        console.error('❌ MongoDB connection error:', err);
+      });
+
+      mongoose.connection.on('disconnected', () => {
+        console.log('ℹ️ MongoDB disconnected');
+      });
+
+      // Set connection options
+      const options = {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+        socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+      };
+
+      // Connect to MongoDB
+      await mongoose.connect(MONGODB_URI, options);
       console.log('✅ Connected to MongoDB Atlas');
+      
+      return mongoose.connection;
     } catch (error) {
-      console.error('❌ MongoDB connection error:', error);
-      process.exit(1);
+      console.error('❌ Failed to connect to MongoDB:', error.message);
+      console.log('🔄 Falling back to file system storage');
+      loadFileData();
+      return null;
     }
   } else {
+    console.log('ℹ️ Using local file system storage');
     loadFileData();
-    console.log('✅ Using local file system storage');
+    return null;
   }
 }
 

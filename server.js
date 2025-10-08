@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const { initDatabase, db, USE_MONGODB } = require('./db');
 
 const app = express();
 // Use environment PORT for production deployment, fallback to 3000 for local development
@@ -48,8 +49,48 @@ function loadData() {
 function saveData() {
   try {
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    // If MongoDB is available, sync data to it
+    if (USE_MONGODB) {
+      syncToMongoDB().catch(err => console.error('MongoDB sync error:', err));
+    }
   } catch (error) {
     console.log('Error saving data:', error);
+  }
+}
+
+// Sync data to MongoDB (runs in background)
+async function syncToMongoDB() {
+  if (!USE_MONGODB) return;
+  
+  try {
+    // Sync all users
+    for (const user of data.users) {
+      await db.createUser(user).catch(() => {
+        // User might already exist, update instead
+      });
+    }
+    
+    // Sync all teams
+    for (const team of data.teams) {
+      await db.createTeam(team).catch(() => {});
+    }
+    
+    // Sync all availability posts
+    for (const post of data.availabilityPosts) {
+      await db.createAvailabilityPost(post).catch(() => {});
+    }
+    
+    // Sync all matches
+    for (const match of data.matches) {
+      await db.createMatch(match).catch(() => {});
+    }
+    
+    // Sync all chat messages
+    for (const msg of data.chatMessages) {
+      await db.createChatMessage(msg).catch(() => {});
+    }
+  } catch (error) {
+    // Silent fail for sync errors
   }
 }
 
@@ -617,18 +658,109 @@ app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// Initialize data on startup
-try {
-  loadData();
-  removeDuplicatePosts();
-  saveData();
-  console.log('Data loaded successfully on startup');
-} catch (error) {
-  console.error('Error loading data on startup:', error);
+// Load data from MongoDB on startup
+async function loadFromMongoDB() {
+  if (!USE_MONGODB) return;
+  
+  try {
+    console.log('📥 Loading data from MongoDB...');
+    
+    // Load all data from MongoDB
+    const users = await db.getAllUsers();
+    const teams = await db.getAllTeams();
+    const availabilityPosts = await db.getAllAvailabilityPosts();
+    const matches = await db.getAllMatches();
+    
+    // Convert MongoDB documents to plain objects
+    data.users = users.map(u => ({
+      id: u.id,
+      name: u.name,
+      phone: u.phone,
+      password: u.password,
+      role: u.role,
+      created_at: u.created_at
+    }));
+    
+    data.teams = teams.map(t => ({
+      id: t.id,
+      captain_id: t.captain_id,
+      team_name: t.team_name,
+      ground: t.ground,
+      members: t.members,
+      created_at: t.created_at
+    }));
+    
+    data.availabilityPosts = availabilityPosts.map(p => ({
+      id: p.id,
+      team_id: p.team_id,
+      captain_id: p.captain_id,
+      day: p.day,
+      date: p.date,
+      bet_amount: p.bet_amount,
+      time_slot: p.time_slot,
+      ground: p.ground,
+      ground_type: p.ground_type,
+      status: p.status,
+      created_at: p.created_at
+    }));
+    
+    data.matches = matches.map(m => ({
+      id: m.id,
+      team1_id: m.team1_id,
+      team2_id: m.team2_id,
+      captain1_id: m.captain1_id,
+      captain2_id: m.captain2_id,
+      day: m.day,
+      date: m.date,
+      bet_amount: m.bet_amount,
+      ground: m.ground,
+      ground_type: m.ground_type,
+      status: m.status,
+      captain1_confirmed: m.captain1_confirmed,
+      captain2_confirmed: m.captain2_confirmed,
+      created_at: m.created_at
+    }));
+    
+    data.chatMessages = [];
+    
+    console.log(`✅ Loaded ${users.length} users, ${teams.length} teams, ${availabilityPosts.length} posts, ${matches.length} matches from MongoDB`);
+  } catch (error) {
+    console.error('Error loading from MongoDB:', error);
+  }
 }
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Cricket Match Scheduler running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Base URL: https://cricket-matches-scheduler.onrender.com`);
-});
+// Initialize data on startup
+async function startServer() {
+  try {
+    // Initialize database (MongoDB or File System)
+    await initDatabase();
+    
+    // Load existing data
+    if (USE_MONGODB) {
+      await loadFromMongoDB();
+      console.log('✅ MongoDB data loaded successfully');
+    } else {
+      loadData();
+      removeDuplicatePosts();
+      saveData();
+      console.log('✅ File system data loaded successfully');
+    }
+    
+    // Start server
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🏏 Cricket Match Scheduler running on port ${PORT}`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+      if (process.env.NODE_ENV === 'production') {
+        console.log(`🚀 Base URL: https://cricket-matches-scheduler.onrender.com`);
+      } else {
+        console.log(`💻 Local URL: http://localhost:${PORT}`);
+      }
+      console.log(`${USE_MONGODB ? '✅ Data will be saved permanently in MongoDB' : '⚠️  Using local file storage (data resets on server restart)'}`);
+    });
+  } catch (error) {
+    console.error('❌ Error starting server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();

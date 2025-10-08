@@ -308,9 +308,10 @@
                     <button class="delete-btn" onclick="deleteAvailability('${post.id}')">🗑️ Delete</button>
                     <br><small>ID: ${post.id}</small>
                     <br>Captain: ${post.captain_name || 'Unknown'}
+                    <br>Date: ${post.date ? new Date(post.date).toLocaleDateString() : 'Not specified'}
                     <br>Bet: ₹${post.bet_amount}
                     <br>Ground: ${post.ground} (${post.ground_type || 'free'})
-                    ${post.time_slot ? `<br>Time: ${post.time_slot}` : ''}
+                    ${post.time_slot ? `<br>Time Slot: ${post.time_slot}` : ''}
                     <br>Status: <strong>${post.status.toUpperCase()}</strong>
                     <br>Created: ${new Date(post.created_at).toLocaleString()}
                 </div>

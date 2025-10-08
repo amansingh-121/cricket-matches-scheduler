@@ -224,20 +224,24 @@ class CricketScheduler {
     async handlePostAvailability(e) {
         e.preventDefault();
         const team_name = document.getElementById('team-name').value.trim();
-        const day = document.getElementById('day-select').value;
         const date = document.getElementById('match-date').value;
         let bet_amount = document.getElementById('bet-amount').value;
         const time_slot = document.getElementById('time-slot').value;
         const ground = document.getElementById('ground').value;
         
-        if (!day) {
-            alert('Please select a day');
+        if (!date) {
+            alert('Please select a date from the calendar');
             return;
         }
         if (!bet_amount) {
             alert('Please select bet amount');
             return;
         }
+        
+        // Extract day from selected date
+        const dateObj = new Date(date);
+        const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const day = days[dateObj.getDay()];
         
         if (bet_amount === 'custom') {
             const customAmount = document.getElementById('custom-bet-amount').value.trim();
@@ -294,20 +298,24 @@ class CricketScheduler {
     async handlePostPaidAvailability(e) {
         e.preventDefault();
         const team_name = document.getElementById('paid-team-name').value.trim();
-        const day = document.getElementById('paid-day-select').value;
         const date = document.getElementById('paid-match-date').value;
         const bet_amount = 'contact the opposite captain';
         const time_slot = document.getElementById('paid-time-slot').value;
         let ground = document.getElementById('paid-ground').value;
 
-        if (!day) {
-            alert('Please select a day');
+        if (!date) {
+            alert('Please select a date from the calendar');
             return;
         }
         if (!ground) {
             alert('Please select a ground');
             return;
         }
+        
+        // Extract day from selected date
+        const dateObj = new Date(date);
+        const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const day = days[dateObj.getDay()];
 
         if (ground === 'custom') {
             const customGround = document.getElementById('custom-ground-name').value.trim();

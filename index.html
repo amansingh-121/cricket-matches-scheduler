@@ -64,19 +64,7 @@
                                 <input type="text" id="team-name" placeholder="Team Name (optional - will use your name if empty)">
                             </div>
                             <div class="form-group">
-                                <select id="day-select" required>
-                                    <option value="">Select Day</option>
-                                    <option value="MONDAY">Monday</option>
-                                    <option value="TUESDAY">Tuesday</option>
-                                    <option value="WEDNESDAY">Wednesday</option>
-                                    <option value="THURSDAY">Thursday</option>
-                                    <option value="FRIDAY">Friday</option>
-                                    <option value="SATURDAY">Saturday</option>
-                                    <option value="SUNDAY">Sunday</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="date" id="match-date" placeholder="dd-mm-yyyy" title="Select specific date for the match">
+                                <input type="date" id="match-date" placeholder="dd-mm-yyyy" title="Select specific date for the match" required>
                             </div>
                             <div class="form-group">
                                 <select id="bet-amount" required>
@@ -94,7 +82,11 @@
                                 <input type="text" id="custom-bet-amount" placeholder="Enter custom bet amount (e.g., ₹1500)">
                             </div>
                             <div class="form-group">
-                                <input type="text" id="time-slot" placeholder="Time Slot (optional)">
+                                <select id="time-slot">
+                                    <option value="">Select Time Slot (optional)</option>
+                                    <option value="Morning">Morning</option>
+                                    <option value="Afternoon">Afternoon</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <select id="ground">
@@ -117,22 +109,16 @@
                                 <input type="text" id="paid-team-name" placeholder="Team Name (optional - will use your name if empty)">
                             </div>
                             <div class="form-group">
-                                <select id="paid-day-select" required>
-                                    <option value="">Select Day</option>
-                                    <option value="MONDAY">Monday</option>
-                                    <option value="TUESDAY">Tuesday</option>
-                                    <option value="WEDNESDAY">Wednesday</option>
-                                    <option value="THURSDAY">Thursday</option>
-                                    <option value="FRIDAY">Friday</option>
-                                    <option value="SATURDAY">Saturday</option>
-                                    <option value="SUNDAY">Sunday</option>
+                                <input type="date" id="paid-match-date" placeholder="dd-mm-yyyy" title="Select specific date for the match" required>
+                            </div>
+                            <div class="form-group">
+                                <select id="paid-time-slot">
+                                    <option value="">Select Time Slot (optional)</option>
+                                    <option value="Morning">Morning</option>
+                                    <option value="Afternoon">Afternoon</option>
+                                    <option value="Evening">Evening</option>
+                                    <option value="Night">Night</option>
                                 </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="date" id="paid-match-date" placeholder="dd-mm-yyyy" title="Select specific date for the match">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" id="paid-time-slot" placeholder="Time Slot (optional)">
                             </div>
                             <div class="form-group">
                                 <select id="paid-ground" required>
